@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Body from "../components/Body.astro";
+import PostCard from "../components/PostCard.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+
+const maxPostCount = 10;
+
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, maxPostCount);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <Body>
+    <section>
+      <ul>
+        {
+          posts.map((post) => (
+            <li>
+              <PostCard post={post} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </Body>
+</html>
